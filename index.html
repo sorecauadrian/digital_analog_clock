@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>digital analog clock</title>
+  <style>
+    body 
+    {
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="clockCanvas" width="500" height="500"></canvas>
+  <script>
+    function drawClock() 
+    {
+      const canvas = document.getElementById('clockCanvas');
+      const ctx = canvas.getContext('2d');
+      const radius = canvas.width / 2;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // drawing the clock face
+      ctx.beginPath();
+      ctx.arc(radius, radius, radius, 0, 2 * Math.PI);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+
+      // getting the hour, minute and second
+      const now = new Date();
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+      const second = now.getSeconds();
+
+      // styling the text
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'black';
+      ctx.font = 'bold 12px Arial';
+
+      // hour hand
+      ctx.save();
+      ctx.translate(radius, radius);
+      ctx.rotate((hour * 30) * Math.PI / 180);
+      for (let i = 1; i <= 8; i++)
+      {
+        ctx.save();
+        ctx.translate(0, -radius * 0.05 * i);
+        ctx.fillText(hour, 0, 0);
+        ctx.restore();
+      }
+      ctx.restore();
+
+      // minute hand
+      ctx.font = '12px Arial';
+      ctx.save();
+      ctx.translate(radius, radius);
+      ctx.rotate((minute * 6) * Math.PI / 180);
+      for (let i = 1; i <= 12; i++)
+      {
+        ctx.save();
+        ctx.translate(0, -radius * 0.05 * i);
+        ctx.fillText(minute, 0, 0);
+        ctx.restore();
+      }
+      ctx.restore();
+
+      // second hand
+      ctx.fillStyle = 'red';
+      ctx.save();
+      ctx.translate(radius, radius);
+      ctx.rotate(second * 6 * Math.PI / 180);
+      // Draw second numbers
+      for (let i = 1; i <= 18; i++)
+      {
+        ctx.save();
+        ctx.translate(0, -radius * 0.05 * i);
+        ctx.fillText(second, 0, 0);
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+
+    // updating the clock every second
+    setInterval(drawClock, 1000);
+
+    // initial call to draw the clock immediately
+    drawClock();
+  </script>
+</body>
+</html>
